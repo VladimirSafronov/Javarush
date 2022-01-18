@@ -12,9 +12,9 @@ public class Solution {
     private static final String BINARY = "01";
 
     public static void main(String[] args) {
-        String binaryNumber = "101";
+        String binaryNumber = "110111101111";
         System.out.println("Двоичное число " + binaryNumber + " равно шестнадцатеричному числу " + toHex(binaryNumber));
-        String hexNumber = "5";
+        String hexNumber = "8f3";
         System.out.println("Шестнадцатеричное число " + hexNumber + " равно двоичному числу " + toBinary(hexNumber));
 
     }
@@ -28,7 +28,7 @@ public class Solution {
             binaryNumber = isLengthMultipleFour(binaryNumber);
             System.out.println(binaryNumber);
 
-            int[] decimalBitsArray = toDecimalArray(binaryNumber);
+            int[] decimalBitsArray = fillDecimalArray(binaryNumber);
             System.out.println(Arrays.toString(decimalBitsArray));
 
             String hexNumber = "";
@@ -45,7 +45,7 @@ public class Solution {
         if (hexNumber.isEmpty()) return "";
 
         else {
-            int decimalNumber = toDecimal(hexNumber);
+            int decimalNumber = toDecimalFromHex(hexNumber);
             String binaryNum = "";
             while (decimalNumber != 0) {
                 binaryNum = decimalNumber % 2 + binaryNum;
@@ -78,21 +78,25 @@ public class Solution {
         return str;
     }
 
-    public static int[] toDecimalArray (String arg) { //выдает некорректное значение при маленьком числе
+    public static int[] fillDecimalArray (String arg) {
         int[] array = new int[arg.length() / 4];
-        int argIndex = 0;
         for (int i = 0; i < array.length; i++) {
-            int degree = array.length;
-            for (int j = 0; j < 4; j++) {
-                array[i] = array[i] + Integer.parseInt(String.valueOf(arg.charAt(argIndex))) * (int) Math.pow(2, degree);
-                argIndex++;
-                degree--;
-            }
+            array[i] = toDecimalFromBinary(arg, i);
         }
         return array;
     }
 
-    public static int toDecimal (String arg) {
+    public static int toDecimalFromBinary (String arg, int number) {
+        int argIndex = number * 4;
+        int total = 0;
+        for (int i = 3; i >= 0; i--) {
+            total = total + Integer.parseInt(String.valueOf(arg.charAt(argIndex))) * (int) Math.pow(2, i);
+            argIndex++;
+        }
+        return total;
+    }
+
+    public static int toDecimalFromHex (String arg) {
         int length = arg.length();
         int decimalNum = 0;
         for (int i = 0; i < length; i++) {
