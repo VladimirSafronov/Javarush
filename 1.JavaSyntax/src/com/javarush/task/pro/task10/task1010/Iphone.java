@@ -36,15 +36,11 @@ public class Iphone {
             return false;
         }
 
-//        if (this.color == null) {   //валидатор javarush не пропускал такое решение, хотя мне оно кажется более читабельным
-//            return iphone.color == null;
-//        }
-//
-//        if (this.model == null) {
-//            return iphone.model == null;
-//        }
 
-        return this.model != null && this.model.equals(iphone.model) && this.color != null && this.color.equals(iphone.color);
+        return this.model != null && 
+            this.model.equals(iphone.model) && 
+            this.color != null && 
+            this.color.equals(iphone.color);
     }
 
     public static void main(String[] args) {
