@@ -5,19 +5,19 @@ package com.javarush.task.pro.task12.task1217;
 */
 
 public class Solution {
-    private var intArray = new int[4];
+    private int[] intArray = new int[4];
 
-    public var getIntArray() {
+    public int[] getIntArray() {
         return intArray;
     }
 
-    public void setIntArray(var intArray) {
+    public void setIntArray(int[] intArray) {
         this.intArray = intArray;
     }
 
     public static void main(String[] args) {
-        var solution = new Solution();
-        var string = new String("Hello");
-        var stringBuilder = new StringBuilder();
+        Solution solution = new Solution();
+        String string = new String("Hello");
+        StringBuilder stringBuilder = new StringBuilder();
     }
 }
