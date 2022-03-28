@@ -29,7 +29,7 @@ public class Solution {
     }
 
     public static Stream<Language> sortByRanking(ArrayList<Language> languages) {
-        Collections.sort(languages, (obj1, obj2) -> (int) (obj2.getRanking() * 10 - obj1.getRanking() * 10));
-        return languages.stream();
+        return languages.stream()
+                .sorted((obj1, obj2) -> Double.compare(obj2.getRanking(), obj1.getRanking()));
     }
 }
