@@ -2,7 +2,6 @@ package com.javarush.task.pro.task18.task1812;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 
 /* 
