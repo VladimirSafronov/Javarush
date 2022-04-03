@@ -4,6 +4,7 @@ import com.javarush.engine.cell.*;
 
 public class MinesweeperGame extends Game {
     private static final int SIDE = 9;
+
     private GameObject [][] gameField = new GameObject[SIDE][SIDE];
 
     public void initialize() {
