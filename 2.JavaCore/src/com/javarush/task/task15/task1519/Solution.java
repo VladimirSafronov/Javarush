@@ -13,27 +13,21 @@ public class Solution {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             String str = reader.readLine();
             while (!(str.equals("exit"))) {
-                if (str.contains(".")) {
-                    try {
+                try {
+                    if (str.contains(".")) {
                         Double number = Double.parseDouble(str);
                         Solution.print(number);
-                    } catch (NumberFormatException e) {
-                        Solution.print(str);
-                    }
-                }
-                else {
-                    try {
+                    } else {
                         int integer = Integer.parseInt(str);
                         if (integer > 0 && integer < 128) {
 
-                            Solution.print((short)integer);
-                        }
-                        else {
+                            Solution.print((short) integer);
+                        } else {
                             Solution.print(integer);
                         }
-                    } catch (NumberFormatException e) {
-                        Solution.print(str);
                     }
+                } catch (NumberFormatException e) {
+                    Solution.print(str);
                 }
                 str = reader.readLine();
             }
