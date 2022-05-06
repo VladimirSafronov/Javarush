@@ -40,4 +40,5 @@ public class Solution {
     public static interface CanMove {
         void doAnotherAction();
     }
+
 }
