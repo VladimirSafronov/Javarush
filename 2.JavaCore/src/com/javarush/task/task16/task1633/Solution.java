@@ -16,8 +16,8 @@ public class Solution {
         threadA.start();
         threadB.start();
 
-        threadA.setUncaughtExceptionHandler(handler);
-        threadB.setUncaughtExceptionHandler(handler);
+//        threadA.setUncaughtExceptionHandler(handler); #1
+//        threadB.setUncaughtExceptionHandler(handler);
 
         threadA.interrupt();
         threadB.interrupt();
@@ -26,10 +26,12 @@ public class Solution {
     public static class TestedThread extends Thread {
         public TestedThread(Thread.UncaughtExceptionHandler handler) {
             setUncaughtExceptionHandler(handler);
+//            setDefaultUncaughtExceptionHandler(handler); #3
             start();
         }
 
         public void run() {
+//            Thread.currentThread().setUncaughtExceptionHandler(handler); #2
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
