@@ -41,7 +41,7 @@ public class Solution {
         List<Product> products = new ArrayList<>();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName)); //перезаписывает файл, выставляя true, будет дозаписывать
-        BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+        BufferedReader reader = new BufferedReader(new FileReader(fileName))) { //вначале нужно читать из файла, затем записывать
 
             while (reader.ready()) {
                 Product product = getProduct(reader.readLine());
