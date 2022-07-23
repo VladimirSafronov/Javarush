@@ -29,7 +29,7 @@ public class Solution {
         try (ZipInputStream zipInput = new ZipInputStream(new SequenceInputStream(streams.elements()));
              FileOutputStream output = new FileOutputStream(args[0])) {
             ZipEntry entry;
-            byte[] buffer = new byte[1024];//буффер для байт
+            byte[] buffer = new byte[1024];//буффер для байт.
             int bufferSize;//здесь хранится размер буффера
             while ((entry = zipInput.getNextEntry()) != null) { //пока поток содержит zip-файлы
                 while ((bufferSize = zipInput.read(buffer)) > 0) { //и размер считанных байт больше нуля
