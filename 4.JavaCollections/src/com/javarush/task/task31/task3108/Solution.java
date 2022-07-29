@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /* 
-Исследуем Path
+Исследуем Path.
 */
 
 public class Solution {
