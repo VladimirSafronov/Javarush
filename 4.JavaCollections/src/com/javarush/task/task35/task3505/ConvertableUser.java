@@ -1,6 +1,7 @@
 package com.javarush.task.task35.task3505;
 
 public class ConvertableUser implements Convertable<Integer> {
+
     private Integer id;
     private String name;
 

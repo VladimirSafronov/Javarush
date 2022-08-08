@@ -1,6 +1,7 @@
 package com.javarush.task.task35.task3505;
 
 public class ConvertableBook implements Convertable<String> {
+
     private String name;
 
     public ConvertableBook(String name) {

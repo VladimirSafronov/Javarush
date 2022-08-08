@@ -9,6 +9,7 @@ List to Map
 */
 
 public class Solution {
+
     public static void main(String[] args) {
         List<ConvertableUser> users = new ArrayList<>();
         users.add(new ConvertableUser(234, "First User"));
