@@ -34,6 +34,7 @@ public class Solution {
          */
     }
 
+
     static class A {
     }
 
