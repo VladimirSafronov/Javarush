@@ -1,6 +1,7 @@
 package com.javarush.task.task38.task3809;
 
 public class JavaRushBankAccount {
+
     private String ownerName;
 
     @LongPositive

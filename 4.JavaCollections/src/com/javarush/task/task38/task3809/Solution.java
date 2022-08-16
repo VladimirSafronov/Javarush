@@ -5,6 +5,7 @@ Annotation + Reflection
 */
 
 public class Solution {
+
     public static void main(String[] args) throws IllegalAccessException {
         JavaRushBankAccount account = new JavaRushBankAccount("Mr.Smith");
         System.out.println("Проверка №1:");
