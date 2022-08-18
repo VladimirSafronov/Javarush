@@ -6,6 +6,7 @@ public class Aggregator {
     public static void main(String[] args) {
         Provider first = new Provider(null);
         Controller controller = new Controller(first);
-        System.out.println(controller.toString());
+
+        controller.scan();
     }
 }
