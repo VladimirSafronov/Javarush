@@ -28,7 +28,14 @@ public class Hippodrome {
         }
     }
 
-    void print() {}
+    void print() {
+        for (Horse horse : horses) {
+            horse.print();
+        }
+        for (int i = 10; i > 0; i--) {
+            System.out.println();
+        }
+    }
 
     void move () {
         for (Horse horse : horses) {
