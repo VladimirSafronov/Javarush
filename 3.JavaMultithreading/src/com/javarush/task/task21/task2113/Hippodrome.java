@@ -21,7 +21,7 @@ public class Hippodrome {
             move();
             print();
             try {
-                Thread.sleep(200);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -67,5 +67,6 @@ public class Hippodrome {
         Hippodrome.game = hippodrome;
 
         Hippodrome.game.run();
+        hippodrome.printWinner();
     }
 }
