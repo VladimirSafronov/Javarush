@@ -30,7 +30,11 @@ public class Hippodrome {
 
     void print() {}
 
-    void move () {}
+    void move () {
+        for (Horse horse : horses) {
+            horse.move();
+        }
+    }
 
     public static void main(String[] args) {
         Hippodrome hippodrome = new Hippodrome(new ArrayList<>());
