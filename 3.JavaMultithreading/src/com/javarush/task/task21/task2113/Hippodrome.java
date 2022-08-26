@@ -16,6 +16,12 @@ public class Hippodrome {
         return horses;
     }
 
+    void run() {}
+
+    void print() {}
+
+    void move () {}
+
     public static void main(String[] args) {
         Hippodrome hippodrome = new Hippodrome(new ArrayList<>());
         hippodrome.horses.add(new Horse("Alpha", 3, 0));
