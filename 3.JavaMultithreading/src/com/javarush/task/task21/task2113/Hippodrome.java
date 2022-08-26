@@ -43,6 +43,22 @@ public class Hippodrome {
         }
     }
 
+    public Horse getWinner() {
+        double winnerDist = 0.0;
+        Horse winner = null;
+        for (Horse horse : horses) {
+            if (horse.distance > winnerDist) {
+                winner = horse;
+                winnerDist = horse.distance;
+            }
+        }
+        return winner;
+    }
+
+    public void printWinner() {
+        System.out.println("Winner is " + getWinner().name + "!");
+    }
+
     public static void main(String[] args) {
         Hippodrome hippodrome = new Hippodrome(new ArrayList<>());
         hippodrome.horses.add(new Horse("Alpha", 3, 0));
