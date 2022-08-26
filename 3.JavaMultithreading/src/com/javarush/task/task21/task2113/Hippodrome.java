@@ -16,7 +16,17 @@ public class Hippodrome {
         return horses;
     }
 
-    void run() {}
+    void run() {
+        for (int i = 100; i > 0; i--) {
+            move();
+            print();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     void print() {}
 
