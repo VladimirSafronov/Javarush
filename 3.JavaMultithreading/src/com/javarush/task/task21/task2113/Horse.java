@@ -35,7 +35,15 @@ public class Horse {
         this.distance = distance;
     }
 
-    public void move() {}
+    public void move() {
+        distance += speed * Math.random();
+    }
 
-    public void print() {}
+    public void print() {
+        int counter = (int) distance;
+        for (int i = 0; i < counter; i++) {
+            System.out.print(".");
+        }
+        System.out.println(name);
+    }
 }
