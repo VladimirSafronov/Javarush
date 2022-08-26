@@ -49,5 +49,7 @@ public class Hippodrome {
         hippodrome.horses.add(new Horse("Beta", 3, 0));
         hippodrome.horses.add(new Horse("Hamma", 3, 0));
         Hippodrome.game = hippodrome;
+
+        Hippodrome.game.run();
     }
 }
