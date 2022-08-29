@@ -10,6 +10,7 @@ public class Solution {
     }
 
     public static String getPartOfString(String string) {
+
         if (string == null) {
             throw new TooShortStringException();
         }
