@@ -51,7 +51,19 @@ public class Room {
         this.mouse = mouse;
     }
 
-    public void run() {}
+    public void run() {
+    }
 
-    public void print() {}
+    public void print() {
+    }
+
+    public void createMouse() {
+        int x = (int) (Math.random() * width);
+        int y = (int) (Math.random() * height);
+        this.mouse = new Mouse(x, y);
+    }
+
+    public void eatMouse() {
+        createMouse();
+    }
 }
