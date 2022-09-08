@@ -5,6 +5,9 @@ public class Room {
         Snake snake = new Snake(5, 5);
         Room.game = new Room(15, 15, snake);
         snake.setDirection(SnakeDirection.DOWN);
+
+        game.createMouse();
+        game.run();
     }
 
     private int width;
@@ -66,4 +69,6 @@ public class Room {
     public void eatMouse() {
         createMouse();
     }
+
+    public void sleep() {}
 }
