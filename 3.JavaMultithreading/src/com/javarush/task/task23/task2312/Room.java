@@ -2,13 +2,16 @@ package com.javarush.task.task23.task2312;
 
 public class Room {
     public static void main(String[] args) {
-        
+        Snake snake = new Snake(5, 5);
+        Room.game = new Room(15, 15, snake);
+        snake.setDirection(SnakeDirection.DOWN);
     }
 
     private int width;
     private int height;
     private Snake snake;
     private Mouse mouse;
+    static Room game;
 
     public Room(int width, int height, Snake snake) {
         this.width = width;
@@ -47,4 +50,8 @@ public class Room {
     public void setMouse(Mouse mouse) {
         this.mouse = mouse;
     }
+
+    public void run() {}
+
+    public void print() {}
 }
