@@ -16,7 +16,6 @@ public class KeyboardObserver extends Thread {
 
     @Override
     public void run() {
-
         frame = new JFrame("KeyPress Tester");
         frame.setTitle("Transparent JFrame Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
