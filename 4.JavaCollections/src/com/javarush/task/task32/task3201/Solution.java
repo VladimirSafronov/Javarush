@@ -15,11 +15,7 @@ public class Solution {
         byte[] textByte = text.getBytes();
 
         try (RandomAccessFile raf = new RandomAccessFile(fileName, "rw")) {
-            if(number > raf.length()) {
-                raf.seek(raf.length());
-            } else {
-                raf.seek(number);
-            }
+            raf.seek(Math.min(number, raf.length()));
             raf.write(textByte);
         } catch (IOException e) {
             e.printStackTrace();
