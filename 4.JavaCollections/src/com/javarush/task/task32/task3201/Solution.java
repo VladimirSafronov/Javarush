@@ -9,6 +9,7 @@ import java.io.RandomAccessFile;
 
 public class Solution {
     public static void main(String... args) {
+
         String fileName = args[0];
         long number = Integer.parseInt(args[1]);
         String text = args[2];
