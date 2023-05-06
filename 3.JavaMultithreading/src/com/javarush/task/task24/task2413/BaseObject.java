@@ -39,7 +39,7 @@ public abstract class BaseObject {
 
     abstract void move();
 
-    boolean intersects(BaseObject o) {
+    boolean intersects(BaseObject o){
         double distanceBetween = Math.sqrt(Math.pow(o.x - this.x, 2) + Math.pow(o.y - this.y, 2));
         return distanceBetween <= Math.max(this.radius, o.radius);
     }
