@@ -30,4 +30,9 @@ public class MainModel implements Model {
         modelData.setUsers(users);
     }
 
+    @Override
+    public void loadUserById(long userId) {
+        User user = userService.getUsersById(userId);
+        modelData.setActiveUser(user);
+    }
 }
