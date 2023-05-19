@@ -16,7 +16,6 @@ public class Solution extends TimerTask {
         }
         this.original = original;
         this.handler = new Thread.UncaughtExceptionHandler() {
-
             @Override
             public void uncaughtException(Thread t, Throwable e) {
                 int threadNameLength = t.getName().length();
