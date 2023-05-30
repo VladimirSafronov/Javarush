@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
@@ -40,6 +41,22 @@ public class Server {
         @Override
         public void run() {
             super.run();
+        }
+
+        private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
+            Message response = null;
+            do {
+                connection.send(new Message(MessageType.NAME_REQUEST));
+                response = connection.receive();
+            } while (response.getType() != MessageType.USER_NAME
+                    || response.getData() == null
+                    || Objects.equals(response.getData(), "")
+                    || connectionMap.containsKey(response.getData()));
+                connectionMap.put(response.getData(), connection);
+                connection.send(new Message(MessageType.NAME_ACCEPTED));
+                ConsoleHelper.writeMessage(response.getData() + " отправлено");
+
+            return response.getData();
         }
     }
 
