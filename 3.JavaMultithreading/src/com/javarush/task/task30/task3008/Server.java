@@ -1,7 +1,41 @@
 package com.javarush.task.task30.task3008;
 
-public class Server {
-    public static void main(String[] args) {
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
+public class Server {
+
+    public static void main(String[] args) {
+        int portNumber = ConsoleHelper.readInt();
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(portNumber);
+            System.out.println("Сервер запущен.");
+            while (true) {
+                Handler handler = new Handler(serverSocket.accept());
+                handler.start();
+            }
+        } catch (IOException e) {
+            try {
+                assert serverSocket != null;
+                serverSocket.close();
+            } catch (IOException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+    }
+
+    private static class Handler extends Thread {
+        private Socket socket;
+
+        public Handler(Socket socket) {
+            this.socket = socket;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+        }
     }
 }
