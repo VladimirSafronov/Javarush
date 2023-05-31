@@ -52,11 +52,20 @@ public class Server {
                     || response.getData() == null
                     || Objects.equals(response.getData(), "")
                     || connectionMap.containsKey(response.getData()));
-                connectionMap.put(response.getData(), connection);
-                connection.send(new Message(MessageType.NAME_ACCEPTED));
-                ConsoleHelper.writeMessage(response.getData() + " отправлено");
+            connectionMap.put(response.getData(), connection);
+            connection.send(new Message(MessageType.NAME_ACCEPTED));
+            ConsoleHelper.writeMessage(response.getData() + " отправлено");
 
             return response.getData();
+        }
+
+        private void notifyUsers(Connection connection, String userName) throws IOException {
+            for (String name : connectionMap.keySet()) {
+                Message message = new Message(MessageType.USER_ADDED, name);
+                if (!name.equals(userName)) {
+                    connection.send(message);
+                }
+            }
         }
     }
 
