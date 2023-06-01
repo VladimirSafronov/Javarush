@@ -40,7 +40,23 @@ public class Server {
 
         @Override
         public void run() {
-            super.run();
+            ConsoleHelper.writeMessage("Установлено соединение с " + socket.getRemoteSocketAddress().toString());
+            String userName = null;
+            try {
+                Connection connection = new Connection(socket);
+                userName = serverHandshake(connection);
+                sendBroadcastMessage(new Message(MessageType.USER_ADDED, userName));
+                notifyUsers(connection, userName);
+                serverMainLoop(connection, userName);
+            } catch (IOException | ClassNotFoundException e) {
+                ConsoleHelper.writeMessage("Произошла ошибка при обмене данными с удаленным адресом.");
+            } finally {
+                if (userName != null) {
+                    connectionMap.remove(userName);
+                    sendBroadcastMessage(new Message(MessageType.USER_REMOVED, userName));
+                    ConsoleHelper.writeMessage("Соединение с удаленным адресом закрыто.");
+                }
+            }
         }
 
         private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
