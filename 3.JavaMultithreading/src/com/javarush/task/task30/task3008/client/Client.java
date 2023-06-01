@@ -11,8 +11,16 @@ public class Client {
     protected Connection connection;
     private volatile boolean clientConnected = false;
 
-    public class SocketThread extends Thread {
+    public static void main(String[] args) {
+        Client client = new Client();
+        client.run();
+    }
 
+    public class SocketThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+        }
     }
 
     protected String getServerAddress() {
@@ -44,6 +52,34 @@ public class Client {
         } catch (IOException e) {
             ConsoleHelper.writeMessage("Сообщение не было отправлено.");
             clientConnected = false;
+        }
+    }
+
+    public void run() {
+        Thread thread = getSocketThread();
+        thread.setDaemon(true);
+        thread.start();
+
+        try {
+            synchronized (this) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            ConsoleHelper.writeMessage("Возникло исключение при попытке нити ожидать.");
+            return;
+        }
+
+        if (clientConnected) {
+            System.out.println("Соединение установлено. Для выхода наберите команду 'exit'.");
+        } else {
+            System.out.println("Произошла ошибка во время работы клиента.");
+        }
+        String messageStr = "";
+        while (clientConnected && !messageStr.equals("exit")) {
+            messageStr = ConsoleHelper.readString();
+            if (shouldSendTextFromConsole()) {
+                sendTextMessage(messageStr);
+            }
         }
     }
 }
