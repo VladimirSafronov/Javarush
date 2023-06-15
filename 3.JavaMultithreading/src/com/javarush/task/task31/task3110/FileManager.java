@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileManager {
-
     private Path rootPath;
     private List<Path> fileList;
 
