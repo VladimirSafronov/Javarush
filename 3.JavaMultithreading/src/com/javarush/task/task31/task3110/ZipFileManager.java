@@ -8,7 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -53,6 +56,37 @@ public class ZipFileManager {
         }
     }
 
+    public void extractAll(Path outputFolder) throws Exception {
+        // Проверяем существует ли zip файл
+        if (!Files.isRegularFile(zipFile)) {
+            throw new WrongZipFileException();
+        }
+
+        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
+            // Создаем директорию вывода, если она не существует
+            if (Files.notExists(outputFolder))
+                Files.createDirectories(outputFolder);
+
+            // Проходимся по содержимому zip потока (файла)
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+
+            while (zipEntry != null) {
+                String fileName = zipEntry.getName();
+                Path fileFullName = outputFolder.resolve(fileName);
+
+                // Создаем необходимые директории
+                Path parent = fileFullName.getParent();
+                if (Files.notExists(parent))
+                    Files.createDirectories(parent);
+
+                try (OutputStream outputStream = Files.newOutputStream(fileFullName)) {
+                    copyData(zipInputStream, outputStream);
+                }
+                zipEntry = zipInputStream.getNextEntry();
+            }
+        }
+    }
+
     public List<FileProperties> getFilesList() throws Exception {
         // Проверяем существует ли zip файл
         if (!Files.isRegularFile(zipFile)) {
@@ -79,27 +113,35 @@ public class ZipFileManager {
         return files;
     }
 
-    public void extractAll(Path outputFolder) throws Exception {
+    public void removeFiles(List<Path> pathList) throws Exception {
         if (!Files.isRegularFile(zipFile)) {
             throw new WrongZipFileException();
         }
-        try (ZipInputStream inputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
-            if (Files.notExists(outputFolder)) {
-                Files.createDirectories(outputFolder);
-            }
+        String fileName = String.valueOf(zipFile.getFileName());
+        String prefix = fileName.substring(0, fileName.lastIndexOf(".")) + "Tmp";
+        String suffix = fileName.substring(fileName.lastIndexOf("."));
+        Path tmp = Files.createTempFile(prefix, suffix);
+
+        try (ZipInputStream input = new ZipInputStream(Files.newInputStream(zipFile));
+        ZipOutputStream output = new ZipOutputStream(Files.newOutputStream(tmp))) {
             ZipEntry entry;
-            while ((entry = inputStream.getNextEntry()) != null) {
-                String fileName = entry.getName();
-                Path fullFilePath = outputFolder.resolve(fileName);
-                Path parent = fullFilePath.getParent();
-                if (Files.notExists(parent)) {
-                    Files.createDirectories(parent);
+            while ((entry = input.getNextEntry()) != null) {
+                if (pathList.contains(Paths.get(entry.getName()))) {
+                    ConsoleHelper.writeMessage("Файл " + entry.getName() + " был удален.");
+                } else {
+                    output.putNextEntry(entry);
+                    copyData(input, output);
+                    output.closeEntry();
                 }
-                try (OutputStream outputStream = Files.newOutputStream(fullFilePath)) {
-                    copyData(inputStream, outputStream);
-                }
+                input.closeEntry();
             }
         }
+
+        Files.move(tmp, zipFile, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public void removeFile(Path path) throws Exception {
+        removeFiles(Collections.singletonList(path));
     }
 
     private void addNewZipEntry(ZipOutputStream zipOutputStream, Path filePath, Path fileName) throws Exception {
