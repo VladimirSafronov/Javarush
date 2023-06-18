@@ -10,14 +10,20 @@ import java.nio.file.Paths;
 public class ZipAddCommand extends ZipCommand {
     @Override
     public void execute() throws Exception {
-        Path fileName = null;
         try {
-            ConsoleHelper.writeMessage("Добавление файла в архив.");
-            ZipFileManager manager = getZipFileManager();
-            fileName = Paths.get(ConsoleHelper.readString());
-            manager.addFile(fileName);
-        } catch (PathIsNotFoundException ex) {
-            ConsoleHelper.writeMessage("Данного файла не существует " + fileName);
+            ConsoleHelper.writeMessage("Добавление нового файла в архив.");
+
+            ZipFileManager zipFileManager = getZipFileManager();
+
+            ConsoleHelper.writeMessage("Введите полное имя файла для добавления:");
+            Path sourcePath = Paths.get(ConsoleHelper.readString());
+
+            zipFileManager.addFile(sourcePath);
+
+            ConsoleHelper.writeMessage("Добавление в архив завершено.");
+
+        } catch (PathIsNotFoundException e) {
+            ConsoleHelper.writeMessage("Файл не был найден.");
         }
     }
 }
