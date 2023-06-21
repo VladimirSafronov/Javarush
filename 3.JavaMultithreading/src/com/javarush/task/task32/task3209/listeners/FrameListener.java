@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class FrameListener extends WindowAdapter {
+
     private View view;
 
     public FrameListener(View view) {
