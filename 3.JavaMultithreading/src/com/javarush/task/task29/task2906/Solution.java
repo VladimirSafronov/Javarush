@@ -6,6 +6,7 @@ package com.javarush.task.task29.task2906;
 
 public class Solution {
     public static void main(String[] args) {
+
         Integer a = getValue(Boolean.TRUE, Boolean.TRUE);   //100 expected
         Integer b = getValue(Boolean.FALSE, Boolean.TRUE);  //200 expected
         Integer c = getValue(Boolean.FALSE, Boolean.FALSE); //null expected
