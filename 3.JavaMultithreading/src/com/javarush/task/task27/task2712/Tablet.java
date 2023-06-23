@@ -30,8 +30,11 @@ public class Tablet extends Observable {
         } catch (IOException e) {
             logger.log(SEVERE, "Console is unavailable.");
         } finally {
-            setChanged();
-            notifyObservers(order);
+            assert order != null;
+            if (!order.isEmpty()) {
+                setChanged();
+                notifyObservers(order);
+            }
         }
         return order;
     }
