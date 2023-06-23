@@ -5,8 +5,6 @@ package com.javarush.task.task27.task2712.ad;
 последовательность для каждого заказа. Он также будет взаимодействовать с плеером и отображать ролики.
  */
 
-import com.javarush.task.task27.task2712.ConsoleHelper;
-
 public class AdvertisementManager {
     private final AdvertisementStorage storage = AdvertisementStorage.getInstance();
 
@@ -17,6 +15,8 @@ public class AdvertisementManager {
     }
 
     public void processVideos() {
-        ConsoleHelper.writeMessage("calling processVideos method");
+        if (storage.list().size() == 0) {
+            throw new NoVideoAvailableException();
+        }
     }
 }
