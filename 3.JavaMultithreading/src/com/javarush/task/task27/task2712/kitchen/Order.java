@@ -15,6 +15,10 @@ public class Order {
         this.dishes = ConsoleHelper.getAllDishesForOrder();
     }
 
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+
     public int getTotalCookingTime() {
         int cookingTime = 0;
         for (Dish dish : dishes) {
