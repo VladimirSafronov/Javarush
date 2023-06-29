@@ -35,7 +35,7 @@ public class AdvertisementManager {
 
         List<Advertisement> videos = new ArrayList<>();
         for (Integer i : currentList) {
-            videos.add(storage.list().get(i - 1)); //составляем плейлист, зная индексы рекламных роликов в БД
+            videos.add(storage.list().get(i - 1));
         }
 
         videos.sort((o1, o2) -> {
