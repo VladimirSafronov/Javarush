@@ -6,6 +6,9 @@ package com.javarush.task.task27.task2712.ad;
  */
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
+import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ public class AdvertisementManager {
     //Метод подбора самого выгодного рекламного плейлиста. Используется динамическое программирование (задача о рюкзаке)
     public void processVideos() {
         if (storage.list().size() == 0) {
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
             throw new NoVideoAvailableException();
         }
 
@@ -43,10 +47,23 @@ public class AdvertisementManager {
             return (int) (price != 0 ? price : o2.getDuration() - o1.getDuration());
         });
 
+        registerEvent(videos); //регистрируем событие
+
         for (Advertisement ad : videos) {
             ConsoleHelper.writeMessage(ad.toString());
             ad.revalidate();
         }
+    }
+
+    private void registerEvent(List<Advertisement> videos) {
+        long amount = 0;
+        int totalDuration = 0;
+        for (Advertisement ad : videos) {
+            amount += ad.getAmountPerOneDisplaying();
+            totalDuration += ad.getDuration();
+        }
+        StatisticManager.getInstance().register(new VideoSelectedEventDataRow(
+                videos, amount, totalDuration));
     }
 
     private void restoreItemList(int[][] matrix, int s, int n, List<Integer> currentList, List<List<Integer>> allLists) {
