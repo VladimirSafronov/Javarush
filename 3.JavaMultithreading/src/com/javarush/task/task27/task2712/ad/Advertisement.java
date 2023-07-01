@@ -30,10 +30,14 @@ public class Advertisement {
     }
 
     public void revalidate() {
-        if (hits < 1) {
-            throw new NoVideoAvailableException();
+        if (hits == 0) {
+            throw new UnsupportedOperationException();
         }
         hits--;
+    }
+
+    public boolean isActive() {
+        return hits > 0;
     }
 
     @Override
