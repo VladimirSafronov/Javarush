@@ -40,9 +40,10 @@ public class ConsoleHelper {
         menu.addAll(Arrays.asList(Dish.values()));
         List<Dish> orderList = new ArrayList<>();
         String order;
+        writeMessage("Введите блюдо: ");
         while (!(order = reader.readLine()).equals("exit")) {
+            writeMessage("Введите блюдо: ");
             try {
-                writeMessage("Введите блюдо: ");
                 if (menu.contains(Dish.valueOf(order.toUpperCase(Locale.ROOT)))) {
                     orderList.add(Dish.valueOf(order.toUpperCase(Locale.ROOT)));
                 }

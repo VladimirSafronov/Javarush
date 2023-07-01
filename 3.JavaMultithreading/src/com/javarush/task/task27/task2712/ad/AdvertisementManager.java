@@ -7,97 +7,85 @@ package com.javarush.task.task27.task2712.ad;
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
 import com.javarush.task.task27.task2712.statistic.StatisticManager;
-import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
 import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AdvertisementManager {
     private final AdvertisementStorage storage = AdvertisementStorage.getInstance();
-
     private int timeSeconds; //время приготовления пищи (время показа рекламы)
+    private long maxAmount; //максимальная выгода
+    private List<Advertisement> optimalVideoSet;
+    private int totalTimeSecondsLeft;
 
     public AdvertisementManager(int timeSeconds) {
         this.timeSeconds = timeSeconds;
+        this.totalTimeSecondsLeft = Integer.MAX_VALUE;
     }
 
-    //Метод подбора самого выгодного рекламного плейлиста. Используется динамическое программирование (задача о рюкзаке)
+    /**
+     * Создание самого выгодного плейлиста (без повторяющихся и неоплаченных треков)
+     */
     public void processVideos() {
-        if (storage.list().size() == 0) {
-            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
+        getOptimalVideoSet(new ArrayList<>(), timeSeconds, 0L); //вызываем рекурсивный метод
+        //создаем событие
+        VideoSelectedEventDataRow videoEvent = new VideoSelectedEventDataRow(optimalVideoSet, maxAmount, timeSeconds - totalTimeSecondsLeft);
+        StatisticManager.getInstance().register(videoEvent); //и регестрируем его
+
+        displayAdvertisement();
+    }
+
+    private void getOptimalVideoSet(List<Advertisement> totalList, int currentTimeSecondsLeft, long currentAmount) {
+        if (currentTimeSecondsLeft < 0) { //пока время отведенное на рекламу не закончится
+            return;
+        } else if (currentAmount > maxAmount //если текущая стоимость больше, чем максимальная
+                || currentAmount == maxAmount && (totalTimeSecondsLeft > currentTimeSecondsLeft //или они равны И общее оставшееся время больше текущего оставшегося времени
+                || totalTimeSecondsLeft == currentTimeSecondsLeft && totalList.size() < optimalVideoSet.size())) { //или они равны И в данном списке рекламные ролики более длинные
+            totalTimeSecondsLeft = currentTimeSecondsLeft;
+            optimalVideoSet = totalList;
+            maxAmount = currentAmount;
+            if (currentTimeSecondsLeft == 0) { //время отведенное на рекламу закончилось
+                return;
+            }
+        }
+
+        List<Advertisement> tmp = getActualAdvertisements(); //получаем список проплаченных видео из БД
+        tmp.removeAll(totalList); //удаляем все видео, находящиеся в оптимальном плейлисте
+        for (Advertisement ad : tmp) {
+            if (!ad.isActive()) continue; //продолжаем только с проплаченными видео
+            List<Advertisement> currentList = new ArrayList<>(totalList); //создаем список на основе оптимального плейлиста
+            currentList.add(ad); //и добавляем в него рекламны ролик
+            //рекурсивно проходим по всем возможным вариантам
+            getOptimalVideoSet(currentList, currentTimeSecondsLeft - ad.getDuration(), currentAmount + ad.getAmountPerOneDisplaying());
+        }
+    }
+
+    private List<Advertisement> getActualAdvertisements() {
+        List<Advertisement> advertisements = new ArrayList<>();
+        for (Advertisement ad : storage.list()) {
+            if (ad.isActive()) {
+                advertisements.add(ad);
+            }
+        }
+        return advertisements;
+    }
+
+    private void displayAdvertisement() {
+        //если нет роликов для показа
+        if (optimalVideoSet == null || optimalVideoSet.isEmpty()) {
             throw new NoVideoAvailableException();
         }
-
-        int totalVideos = storage.list().size();
-        int[][] priceMatrix = new int[totalVideos + 1][timeSeconds + 1]; //в значении будет храниться цена плейлиста
-        fillMatrix(priceMatrix, totalVideos, timeSeconds);
-        List<Integer> currentList = new ArrayList<>();
-        List<List<Integer>> allLists = new ArrayList<>();
-        allLists.add(currentList);
-        restoreItemList(priceMatrix, totalVideos, timeSeconds, currentList, allLists);
-
-        List<Advertisement> videos = new ArrayList<>();
-        for (Integer i : currentList) {
-            videos.add(storage.list().get(i - 1));
-        }
-
-        videos.sort((o1, o2) -> {
-            long price = o2.getAmountPerOneDisplaying() - o1.getAmountPerOneDisplaying();
-            return (int) (price != 0 ? price : o2.getDuration() - o1.getDuration());
+        //сортируем плейлист по цене за показ, затем по длинне ролика
+        Collections.sort(optimalVideoSet, (o1, o2) -> {
+            long bestAmount = o2.getAmountPerOneDisplaying() - o1.getAmountPerOneDisplaying();
+            return (int) (bestAmount != 0 ? bestAmount : o2.getDuration() - o1.getDuration());
         });
 
-        registerEvent(videos); //регистрируем событие
-
-        for (Advertisement ad : videos) {
+        for (Advertisement ad : optimalVideoSet) {
             ConsoleHelper.writeMessage(ad.toString());
-            ad.revalidate();
-        }
-    }
-
-    private void registerEvent(List<Advertisement> videos) {
-        long amount = 0;
-        int totalDuration = 0;
-        for (Advertisement ad : videos) {
-            amount += ad.getAmountPerOneDisplaying();
-            totalDuration += ad.getDuration();
-        }
-        StatisticManager.getInstance().register(new VideoSelectedEventDataRow(
-                videos, amount, totalDuration));
-    }
-
-    private void restoreItemList(int[][] matrix, int s, int n, List<Integer> currentList, List<List<Integer>> allLists) {
-        //мы пойдем с конца матрицы к ее началу
-        if (matrix[s][n] == 0) { //если плейлист ничего не стоит
-            return;
-        } else if (matrix[s - 1][n] == matrix[s][n]) { //если цены без текущего видео и с ним равны
-            //если цена ролика выше, чем у предыдущего
-            if (n >= storage.list().get(s - 1).getDuration()
-                    && storage.list().get(s - 1).getAmountPerOneDisplaying() > storage.list().get(s - 2).getAmountPerOneDisplaying()) {
-                List<Integer> newList = new ArrayList<>(currentList);
-                allLists.add(newList);
-                newList.add(s);
-                //вызываем рекурсию с предыдущим видео,уменьшенным временем плейлиста, и новым списком
-                restoreItemList(matrix, s - 1, n - storage.list().get(s - 1).getDuration(), newList, allLists);
-            }
-            restoreItemList(matrix, s - 1, n, currentList, allLists);
-        } else {
-            currentList.add(s);
-            restoreItemList(matrix, s - 1, n - storage.list().get(s - 1).getDuration(), currentList, allLists);
-        }
-    }
-
-    private void fillMatrix(int[][] matrix, int totalVideos, int totalTime) {
-        for (int k = 1; k <= totalVideos; k++) {
-            for (int s = 1; s <= totalTime; s++) { //вместимость плейлиста
-                if (s >= storage.list().get(k - 1).getDuration()) { //если продолжительность оставшегося плейлиста >= длине рекламного ролика
-                    //то выбираем более прибыльное - цена плейлиста без текущего ролика либо с ним
-                    matrix[k][s] = Math.max(matrix[k - 1][s],
-                            matrix[k - 1][s - storage.list().get(k - 1).getDuration()] + (int) storage.list().get(k - 1).getAmountPerOneDisplaying()); //?но ведь цена всегда должна быть выше
-                } else {
-                    matrix[k][s] = matrix[k - 1][s];
-                }
-            }
+            ad.revalidate(); //уменьшаем значение количества проплаченной рекламы
         }
     }
 }
