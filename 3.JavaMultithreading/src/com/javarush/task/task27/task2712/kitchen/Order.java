@@ -19,6 +19,10 @@ public class Order {
         return dishes;
     }
 
+    public Tablet getTablet() {
+        return tablet;
+    }
+
     protected void initDishes() throws IOException {
         this.dishes = ConsoleHelper.getAllDishesForOrder();
     }
