@@ -16,14 +16,15 @@ public class Restaurant {
         Cook cooker1 = new Cook("Amigo");
         Cook cooker2 = new Cook("Bob");
         StatisticManager statisticManager = StatisticManager.getInstance();
-        statisticManager.register(cooker1); //добавляем повара во множество поваров
+        statisticManager.register(cooker1);
         statisticManager.register(cooker2);
+
+        OrderManager orderManager = new OrderManager(); //принимает заказы от планшета (слушатель)
 
         List<Tablet> tablets = new ArrayList<>();
         for (int i = 1; i <= TABLET_COUNT; i++) {
             Tablet tablet = new Tablet(i);
-            tablet.addObserver(cooker1); //добавление повара в качестве наблюдателя за планшетом
-            tablet.addObserver(cooker2);
+            tablet.addObserver(orderManager);
             tablets.add(tablet);
         }
         Thread task = new Thread(new RandomOrderGeneratorTask(tablets, ORDER_CREATING_INTERVAL));
