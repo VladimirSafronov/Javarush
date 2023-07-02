@@ -26,6 +26,7 @@ public class Restaurant {
             tablet.setQueue(ORDER_QUEUE);
             tablets.add(tablet);
         }
+
         Thread task = new Thread(new RandomOrderGeneratorTask(tablets, ORDER_CREATING_INTERVAL));
         task.start();
         try {
