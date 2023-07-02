@@ -45,30 +45,25 @@ public class StatisticManager {
      * @return
      */
     public Map<String, Long> getDaysProfit() {
-        Map<String, Long> daysProfit = new HashMap<>();
+        Map<String, Long> daysProfit = new HashMap();
         List<EventDataRow> videoEvents = statisticStorage.get(EventType.SELECTED_VIDEOS);
         SimpleDateFormat formatter = getFormatter();
         long total = 0L;
         for (EventDataRow event : videoEvents) {
             VideoSelectedEventDataRow videoEvent = (VideoSelectedEventDataRow) event;
-            String date = formatter.format(videoEvent.getDate()); //получаем ключ события (дата в виде строки)
-            if (!daysProfit.containsKey(date)) { //если такой даты в мапе еще нет, то создаем
+            String date = formatter.format(videoEvent.getDate());
+            if (!daysProfit.containsKey(date)) {
                 daysProfit.put(date, 0L);
             }
             total += videoEvent.getAmount();
             daysProfit.put(date, daysProfit.get(date) + videoEvent.getAmount());
         }
 
-        daysProfit.put("Total", total); //общую сумму также помещаем в мапу
+        daysProfit.put("Total", total);
 
         return daysProfit;
     }
 
-    /**
-     * Получение времени работы поваров. Ключ - дата в виде строки, значение - мапа (имя повара, рабочее время)
-     *
-     * @return
-     */
     public Map<String, Map<String, Integer>> getCookerWork() {
         Map<String, Map<String, Integer>> allData = new HashMap<>();
         Map<String, Integer> cookerHours = new HashMap<>();
