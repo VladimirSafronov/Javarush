@@ -20,6 +20,10 @@ public class StatisticManager {
     private StatisticManager() {
     }
 
+    public Set<Cook> getCooks() {
+        return cooks;
+    }
+
     public static StatisticManager getInstance() {
         if (instance == null) {
             synchronized (StatisticManager.class) {
