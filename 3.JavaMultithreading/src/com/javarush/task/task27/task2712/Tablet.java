@@ -3,6 +3,7 @@ package com.javarush.task.task27.task2712;
 import com.javarush.task.task27.task2712.ad.AdvertisementManager;
 import com.javarush.task.task27.task2712.ad.NoVideoAvailableException;
 import com.javarush.task.task27.task2712.kitchen.Order;
+import com.javarush.task.task27.task2712.kitchen.TestOrder;
 
 import java.io.IOException;
 import java.util.Observable;
@@ -29,14 +30,7 @@ public class Tablet extends Observable {
         Order order = null;
         try {
             order = new Order(this);
-            ConsoleHelper.writeMessage(order.toString());
-            AdvertisementManager advertisementManager =
-                    new AdvertisementManager(order.getTotalCookingTime() * 60); //создание объекта для рекламы
-            try {
-                advertisementManager.processVideos(); //запуск рекламы
-            } catch (NoVideoAvailableException e) {
-                logger.log(Level.INFO, "No video is available for the order " + order);
-            }
+            createAndStartAdvertisement(order);
         } catch (IOException e) {
             logger.log(SEVERE, "Console is unavailable.");
         } finally {
@@ -47,6 +41,36 @@ public class Tablet extends Observable {
             }
         }
         return order;
+    }
+
+    /**
+     * будет создавать заказ из тех блюд, которые выберет пользователь
+     */
+    public void createTestOrder() {
+        TestOrder order = null;
+        try {
+            order = new TestOrder(this);
+            createAndStartAdvertisement(order);
+        } catch (IOException e) {
+            logger.log(SEVERE, "Test order didn't create.");
+        } finally {
+            assert order != null;
+            if (!order.isEmpty()) {
+                setChanged();
+                notifyObservers(order);
+            }
+        }
+    }
+
+    private void createAndStartAdvertisement(Order order) {
+        ConsoleHelper.writeMessage(order.toString());
+        AdvertisementManager advertisementManager =
+                new AdvertisementManager(order.getTotalCookingTime() * 60); //создание объекта для рекламы
+        try {
+            advertisementManager.processVideos(); //запуск рекламы
+        } catch (NoVideoAvailableException e) {
+            logger.log(Level.INFO, "No video is available for the order " + order);
+        }
     }
 
     @Override
