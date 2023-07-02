@@ -14,6 +14,7 @@ public class AdvertisementStorage {
         add(new Advertisement(someContent, "First Video", 5000, 100, 3 * 60));
         add(new Advertisement(someContent, "Second Video", 100, 10, 15 * 60));
         add(new Advertisement(someContent, "Third Video", 400, 2, 10 * 60));
+        add(new Advertisement(someContent, "четвертое видео", 4, 0, 4 * 60));
     }
 
     public static AdvertisementStorage getInstance() {
