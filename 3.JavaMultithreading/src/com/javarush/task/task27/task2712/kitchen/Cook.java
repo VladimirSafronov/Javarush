@@ -56,5 +56,9 @@ public class Cook extends Observable implements Runnable {
                 }
             }
         }
+//        try {
+//            Thread.sleep(10);
+//        } catch (InterruptedException e) {
+//        }
     }
 }
