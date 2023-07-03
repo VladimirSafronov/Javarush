@@ -9,6 +9,7 @@ public class BinaryRepresentationTask extends RecursiveTask<String> {
         this.x = x;
     }
 
+
     @Override
     protected String compute() {
         int a = x % 2;
