@@ -22,4 +22,5 @@ public class Solution {
         number |= number >> 16;
         return number & (~number >> 1); //вычитаем из полученного числа равное ему с одним смещенным битом вправо
     }
+
 }
