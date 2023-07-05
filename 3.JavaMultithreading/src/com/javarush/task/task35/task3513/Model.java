@@ -7,8 +7,12 @@ import java.util.List;
 public class Model {
     private static final int FIELD_WIDTH = 4;
     private Tile[][] gameTiles;
+    int maxTile;
+    int score;
 
     public Model() {
+        this.score = 0;
+        this.maxTile = 0;
         resetGameTiles();
     }
 
@@ -52,6 +56,48 @@ public class Model {
             } else {
                 tileList.get(randomIndex).value = 4;
             }
+        }
+    }
+
+    /**
+     * Релизация слияния полей одного номинала (4, 4, 4, 0 -> 8, 4, 0, 0)
+     *
+     * @param tiles
+     */
+    private void mergeTiles(Tile[] tiles) {
+        for (int i = 0; i < tiles.length - 1; i++) {
+            if (tiles[i].value == 0) {
+                break;
+            }
+            if (tiles[i].value == tiles[i + 1].value) {
+                tiles[i].value *= 2;
+                score += tiles[i].value;
+                if (tiles[i].value > maxTile) {
+                    maxTile = tiles[i].value;
+                }
+                tiles[i + 1].value = 0; //обнуляем следующее значение
+                i++;
+            }
+        }
+        compressTiles(tiles);
+    }
+
+    /**
+     * Реализация перемещения пустых полей в конец строки при ходе (4, 2, 0, 4 -> 4, 2, 4, 0)
+     *
+     * @param tiles
+     */
+    private void compressTiles(Tile[] tiles) {
+        int zeroCount = 0;
+        for (int i = 0; i < tiles.length; i++) {
+            if (tiles[i].value != 0) {
+                tiles[i - zeroCount].value = tiles[i].value;
+            } else {
+                zeroCount++;
+            }
+        }
+        for (int i = tiles.length - 1; i > tiles.length - 1 - zeroCount; i--) {
+            tiles[i].value = 0;
         }
     }
 }
