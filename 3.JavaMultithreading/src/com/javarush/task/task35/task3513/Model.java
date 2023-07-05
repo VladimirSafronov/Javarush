@@ -63,8 +63,10 @@ public class Model {
      * Релизация слияния полей одного номинала (4, 4, 4, 0 -> 8, 4, 0, 0)
      *
      * @param tiles
+     * @return были ли внесены изменения в массив
      */
-    private void mergeTiles(Tile[] tiles) {
+    private boolean mergeTiles(Tile[] tiles) {
+        boolean isChanged = false;
         for (int i = 0; i < tiles.length - 1; i++) {
             if (tiles[i].value == 0) {
                 break;
@@ -72,6 +74,7 @@ public class Model {
             if (tiles[i].value == tiles[i + 1].value) {
                 tiles[i].value *= 2;
                 score += tiles[i].value;
+                isChanged = true;
                 if (tiles[i].value > maxTile) {
                     maxTile = tiles[i].value;
                 }
@@ -79,15 +82,32 @@ public class Model {
                 i++;
             }
         }
-        compressTiles(tiles);
+        if (isChanged) {
+            compressTiles(tiles);
+        }
+        return isChanged;
     }
 
     /**
      * Реализация перемещения пустых полей в конец строки при ходе (4, 2, 0, 4 -> 4, 2, 4, 0)
      *
      * @param tiles
+     * @return были ли внесены изменения в массив
      */
-    private void compressTiles(Tile[] tiles) {
+    private boolean compressTiles(Tile[] tiles) {
+        //подсчитаем нули с конца
+        int zeroCountFromTail = 0;
+        for (int i = tiles.length - 1; i >= 0; i--) {
+            if (tiles[i].value != 0) {
+                break;
+            } else {
+                zeroCountFromTail++;
+            }
+            if (zeroCountFromTail == tiles.length) { //если одни нули, то никаких манипуляций делать не нужно
+                return false;
+            }
+        }
+
         int zeroCount = 0;
         for (int i = 0; i < tiles.length; i++) {
             if (tiles[i].value != 0) {
@@ -96,8 +116,28 @@ public class Model {
                 zeroCount++;
             }
         }
-        for (int i = tiles.length - 1; i > tiles.length - 1 - zeroCount; i--) {
+
+        if (zeroCount == zeroCountFromTail) { //означает, что все нули были вконце
+            return false;
+        }
+
+        for (int i = tiles.length - 1; i > tiles.length - 1 - zeroCount; i--) { //заполняем конец массива нулями
             tiles[i].value = 0;
+        }
+
+        return true;
+    }
+
+    public void left() {
+        boolean flag = false;
+        for (int i = 0; i < gameTiles.length; i++) {
+            compressTiles(gameTiles[i]);
+            if (mergeTiles(gameTiles[i])) {
+                flag = true;
+            }
+        }
+        if (flag) { //по правилам нужно добавить плитку только единажды
+            addTile();
         }
     }
 }
