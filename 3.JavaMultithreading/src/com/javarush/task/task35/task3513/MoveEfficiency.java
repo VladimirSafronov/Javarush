@@ -1,7 +1,6 @@
 package com.javarush.task.task35.task3513;
 
-//описывает эффективность хода
-public class MoveEfficiency {
+public class MoveEfficiency implements Comparable<MoveEfficiency> {
     private int numberOfEmptyTiles;
     private int score;
     private Move move;
@@ -14,5 +13,14 @@ public class MoveEfficiency {
 
     public Move getMove() {
         return move;
+    }
+
+    @Override
+    public int compareTo(MoveEfficiency o) {
+        int ans = Integer.compare(this.numberOfEmptyTiles, o.numberOfEmptyTiles);
+        if (ans == 0) {
+            ans = Integer.compare(this.score, o.score);
+        }
+        return ans;
     }
 }
