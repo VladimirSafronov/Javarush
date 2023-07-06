@@ -92,6 +92,7 @@ public class Model {
         }
         if (isChanged) {
             compressTiles(tiles);
+            addTile();
         }
         return isChanged;
     }
