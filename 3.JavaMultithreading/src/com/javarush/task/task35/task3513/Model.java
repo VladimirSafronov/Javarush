@@ -142,6 +142,9 @@ public class Model {
      * сдвигает поля влево
      */
     public void left() {
+        if (isSaveNeeded) {
+            saveState(gameTiles);
+        }
         boolean flag = false;
         for (int i = 0; i < gameTiles.length; i++) {
             compressTiles(gameTiles[i]);
@@ -152,9 +155,11 @@ public class Model {
         if (flag) { //по правилам нужно добавить плитку только единажды
             addTile();
         }
+        isSaveNeeded = true;
     }
 
     public void down() {
+        saveState(gameTiles);
         rotation();
         left();
         for (int i = 0; i < 3; i++) {
@@ -163,6 +168,7 @@ public class Model {
     }
 
     public void right() {
+        saveState(gameTiles);
         rotation();
         rotation();
         left();
@@ -171,6 +177,7 @@ public class Model {
     }
 
     public void up() {
+        saveState(gameTiles);
         for (int i = 0; i < 3; i++) {
             rotation();
         }
