@@ -16,6 +16,10 @@ public class Model {
         resetGameTiles();
     }
 
+    public Tile[][] getGameTiles() {
+        return gameTiles;
+    }
+
     void resetGameTiles() {
         gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
         for (int i = 0; i < gameTiles.length; i++) {
@@ -185,5 +189,27 @@ public class Model {
                 gameTiles[i][j] = dest[i][j];
             }
         }
+    }
+
+    /**
+     * проверяет возможность сделать ход в текущей позиции
+     *
+     * @return
+     */
+    public boolean canMove() {
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                if (gameTiles[i][j].value == 0) {
+                    return true;
+                }
+                if (i != gameTiles.length - 1 && gameTiles[i][j].value == gameTiles[i + 1][j].value) {
+                    return true;
+                }
+                if (j != gameTiles[0].length - 1 && gameTiles[i][j].value == gameTiles[i][j + 1].value) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
