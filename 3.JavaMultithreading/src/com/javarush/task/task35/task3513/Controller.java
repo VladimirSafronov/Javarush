@@ -18,6 +18,10 @@ public class Controller extends KeyAdapter {
         return model.getGameTiles();
     }
 
+    public View getView() {
+        return view;
+    }
+
     public int getScore() {
         return model.score;
     }
