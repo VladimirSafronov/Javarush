@@ -128,6 +128,9 @@ public class Model {
         return true;
     }
 
+    /**
+     * сдвигает поля влево
+     */
     public void left() {
         boolean flag = false;
         for (int i = 0; i < gameTiles.length; i++) {
@@ -138,6 +141,49 @@ public class Model {
         }
         if (flag) { //по правилам нужно добавить плитку только единажды
             addTile();
+        }
+    }
+
+    public void down() {
+        rotation();
+        left();
+        for (int i = 0; i < 3; i++) {
+            rotation();
+        }
+    }
+
+    public void right() {
+        rotation();
+        rotation();
+        left();
+        rotation();
+        rotation();
+    }
+
+    public void up() {
+        for (int i = 0; i < 3; i++) {
+            rotation();
+        }
+        left();
+        rotation();
+    }
+
+    /**
+     * поворачивает матрицу по часовой стрелке
+     */
+    private void rotation() {
+        //заполняем временный массив
+        Tile[][] dest = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                dest[j][FIELD_WIDTH - 1 - i] = gameTiles[i][j]; //по формуле устанавливаем значения как будто повернули исходный по часовой стрелке
+            }
+        }
+
+        for (int i = 0; i < dest.length; i++) {
+            for (int j = 0; j < dest[0].length; j++) {
+                gameTiles[i][j] = dest[i][j];
+            }
         }
     }
 }
