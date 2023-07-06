@@ -272,4 +272,31 @@ public class Model {
                 break;
         }
     }
+
+    /**
+     * Проверяет отличается ли вес всех плиток в gameTiles с весом сохраненного массива
+     *
+     * @return
+     */
+    public boolean hasBoardChanged() {
+        Tile[][] savedTiles = previousStates.peek();
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                if (gameTiles[i][j].value != savedTiles[i][j].value) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private MoveEfficiency getMoveEfficiency(Move move) {
+        move.move();
+        MoveEfficiency moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        if (!hasBoardChanged()) {
+            return new MoveEfficiency(-1, 0, move);
+        }
+        rollback();
+        return moveEfficiency;
+    }
 }
