@@ -2,17 +2,23 @@ package com.javarush.task.task35.task3513;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 //будет содержать игровую логику и хранить игровое поле
 public class Model {
     private static final int FIELD_WIDTH = 4;
     private Tile[][] gameTiles;
-    int maxTile;
     int score;
+    int maxTile;
+    private Stack<Tile[][]> previousStates;
+    private Stack<Integer> previousScores;
+    private boolean isSaveNeeded = true;
 
     public Model() {
         this.score = 0;
         this.maxTile = 0;
+        this.previousStates = new Stack<>();
+        this.previousScores = new Stack<>();
         resetGameTiles();
     }
 
@@ -211,5 +217,32 @@ public class Model {
             }
         }
         return false;
+    }
+
+    /**
+     * сохраняет значения игрового поля и очков
+     *
+     * @param gameTiles
+     */
+    private void saveState(Tile[][] gameTiles) {
+        Tile[][] dest = new Tile[gameTiles.length][gameTiles[0].length];
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles[0].length; j++) {
+                dest[i][j] = new Tile(gameTiles[i][j].value);
+            }
+        }
+        previousStates.push(dest);
+        previousScores.push(score);
+        isSaveNeeded = false;
+    }
+
+    /**
+     * восстанавливает сохраненные значения
+     */
+    public void rollback() {
+        if (!previousStates.isEmpty() && !previousScores.isEmpty()) {
+            gameTiles = previousStates.pop();
+            score = previousScores.pop();
+        }
     }
 }
