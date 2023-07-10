@@ -12,6 +12,16 @@ public class Tetris {
         return figure;
     }
 
+    /**
+     * Отвечает за всю игру
+     */
+    public void run() {}
+
+    /**
+     * Отвечает за один шаг в игре
+     */
+    public void step() {}
+
     public static void main(String[] args) {
         
     }
