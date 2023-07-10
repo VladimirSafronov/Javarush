@@ -57,5 +57,4 @@ public class Figure {
      */
     void landed() {
     }
-
 }
