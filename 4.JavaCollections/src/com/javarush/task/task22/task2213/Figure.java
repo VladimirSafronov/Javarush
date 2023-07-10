@@ -23,4 +23,38 @@ public class Figure {
     public int[][] getMatrix() {
         return matrix;
     }
+
+    void left() {
+    }
+
+    void right() {
+    }
+
+    void down() {
+    }
+
+    void up() {
+    }
+
+    void rotate() {
+    }
+
+    void downMaximum() {
+    }
+
+    /**
+     * Может ли фигура помещена в данную позицию
+     *
+     * @return
+     */
+    boolean isCurrentPositionAvailable() {
+        return true;
+    }
+
+    /**
+     * вызывается, когда фигурка достигла дна или уперлась в другую фигурку
+     * Все ее занятые клетки теперь должны добавиться в Field
+     */
+    void landed() {
+    }
 }
