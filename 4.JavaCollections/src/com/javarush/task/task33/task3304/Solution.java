@@ -2,6 +2,8 @@ package com.javarush.task.task33.task3304;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -20,8 +22,9 @@ public class Solution {
         ObjectMapper mapper = new ObjectMapper();
         String data = mapper.writeValueAsString(one);
 
-        data = data.replaceFirst(one.getClass().getSimpleName().toLowerCase(), resultClassObject.getSimpleName().toLowerCase());
-
+//        data = data.replaceFirst(one.getClass().getSimpleName().toLowerCase(), resultClassObject.getSimpleName().toLowerCase());
+        mapper.disable(MapperFeature.USE_ANNOTATIONS);
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         return mapper.readValue(data, resultClassObject);
     }
 
