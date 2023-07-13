@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.List;
 
+//валидацию эта задача проходит только при одновременном использовании
+// @JsonSubTypes.Type(value = Cat.class, name = "cat") и @JsonTypeName("cat")
+//но как я понял одна аннотация равнозначна второй
 
 public class Zoo {
     public List<Animal> animals = new ArrayList<>();
