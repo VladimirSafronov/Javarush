@@ -4,9 +4,6 @@ package com.javarush.task.task34.task3404;
 Рекурсия для мат. выражения
 */
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
@@ -14,24 +11,9 @@ public class Solution {
     }
 
     public void recurse(final String expression, int countOperation) {
-
-        if (!hasBrackets(expression)) {
-            Set<String> operations = new HashSet<>();
-            operations.add("+");
-            operations.add("-");
-            operations.add("*");
-            operations.add("/");
-            operations.add("sin");
-            operations.add("tan");
-            operations.add("cos");
-            operations.add("ˆ");
-
+        if (expression.equals("")) {
 
         }
-    }
-
-    public boolean hasBrackets(String str) {
-        return str.contains(")");
     }
 
     public Solution() {
