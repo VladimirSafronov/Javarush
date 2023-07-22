@@ -1,11 +1,29 @@
 package com.javarush.task.task37.task3707;
 
 import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneable, Set<E> {
+    private static final Object PRESENT = new Object();
+    private transient HashMap<E, Object> map;
+
+    public AmigoSet() {
+        map = new HashMap<>();
+    }
+
+    public AmigoSet(Collection<? extends E> collection) {
+        int capacity = Math.max(16, (int) (Math.ceil(collection.size() / .75f)));
+        map = new HashMap<>(capacity);
+        for (E e : collection) {
+            map.put(e, PRESENT);
+        }
+    }
+
+    @Override
+    public boolean add(E e) {
+        return null == map.put(e, PRESENT);
+    }
+
     @Override
     public Iterator<E> iterator() {
         return null;
