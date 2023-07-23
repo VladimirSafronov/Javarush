@@ -1,6 +1,6 @@
 package com.javarush.task.task37.task3707;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneable, Set<E> {
@@ -12,7 +12,7 @@ public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneab
     }
 
     public AmigoSet(Collection<? extends E> collection) {
-        int capacity = Math.max(16, (int) (Math.ceil(collection.size() / .75f)));
+        int capacity = Math.max(16, (int) (collection.size() / .75f) + 1);
         map = new HashMap<>(capacity);
         for (E e : collection) {
             map.put(e, PRESENT);
@@ -65,5 +65,37 @@ public class AmigoSet<E> extends AbstractSet<E> implements Serializable, Cloneab
             throw new InternalError();
         }
         return result;
+    }
+
+    private void writeObject(ObjectOutputStream outputStream) {
+        try {
+            outputStream.defaultWriteObject();
+
+            outputStream.writeInt(HashMapReflectionHelper.<Integer>callHiddenMethod(map, "capacity"));
+            outputStream.writeFloat(HashMapReflectionHelper.<Float>callHiddenMethod(map, "loadFactor"));
+            outputStream.writeInt(map.size());
+
+            for (E e : map.keySet()) {
+                outputStream.writeObject(e);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readObject(ObjectInputStream inputStream) {
+        try {
+            inputStream.defaultReadObject();
+            int capacity = inputStream.readInt();
+            float loadFactor = inputStream.readFloat();
+            int size = inputStream.readInt();
+            map = new HashMap<>(capacity, loadFactor);
+            for (int i = 0; i < size; i++) {
+                map.put((E) inputStream.readObject(), PRESENT);
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
