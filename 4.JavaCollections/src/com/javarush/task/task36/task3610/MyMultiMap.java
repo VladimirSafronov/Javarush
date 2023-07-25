@@ -5,8 +5,8 @@ import java.util.*;
 
 public class MyMultiMap<K, V> extends HashMap<K, V> implements Cloneable, Serializable {
     static final long serialVersionUID = 123456789L;
-    private HashMap<K, List<V>> map;
-    private int repeatCount;
+    private final HashMap<K, List<V>> map;
+    private final int repeatCount;
 
     public MyMultiMap(int repeatCount) {
         this.repeatCount = repeatCount;
@@ -56,20 +56,14 @@ public class MyMultiMap<K, V> extends HashMap<K, V> implements Cloneable, Serial
 
     @Override
     public Set<K> keySet() {
-        Set<K> keys = new HashSet<>();
-        for (K key : map.keySet()) {
-            keys.add(key);
-        }
-        return keys;
+        return new HashSet<>(map.keySet());
     }
 
     @Override
     public Collection<V> values() {
         Collection<V> collection = new ArrayList<>();
         for (K key : map.keySet()) {
-            for (int i = 0; i < map.get(key).size(); i++) {
-                collection.add(map.get(key).get(i));
-            }
+            collection.addAll(map.get(key));
         }
         return collection;
     }
