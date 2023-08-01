@@ -14,6 +14,7 @@ public class Solution {
         testStrategy(new FileStorageStrategy(), 500);
         testStrategy(new OurHashBiMapStorageStrategy(), 10000);
         testStrategy(new HashBiMapStorageStrategy(), 10000);
+        testStrategy(new DualHashBidiMapStorageStrategy(), 10000);
     }
 
     public static Set<Long> getIds(Shortener shortener, Set<String> strings) {
