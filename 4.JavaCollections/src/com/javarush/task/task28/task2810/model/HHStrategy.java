@@ -15,6 +15,7 @@ public class HHStrategy implements Strategy {
     @Override
     public List<Vacancy> getVacancies(String searchString) {
         try {
+
             Document doc = Jsoup.connect(String.format(URL_FORMAT, "Moscow", 0))
                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36")
                     .referrer("https://hh.ru/search/vacancy?text=java+Kie")
